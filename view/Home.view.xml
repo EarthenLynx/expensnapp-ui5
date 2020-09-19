@@ -19,7 +19,7 @@
 		<footer>
 			<OverflowToolbar>
 				<ToolbarSpacer/>
-				<Button text="{i18n>buttonCameraText}" tooltip="{i18n>buttonCameraTooltip}" icon="sap-icon://camera" type="Emphasized" press="handleTakeScreenshot" />
+				<Button text="{i18n>buttonCameraText}" tooltip="{i18n>buttonCameraTooltip}" icon="sap-icon://camera" type="Emphasized" press="handleTakeScreenshot" id="button-press-handleTakeScreenshot" />
 				<ToolbarSpacer/>
 			</OverflowToolbar>
 		</footer>

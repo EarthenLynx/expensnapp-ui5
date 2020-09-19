@@ -63,10 +63,10 @@ sap.ui.define([
 			this.getOwnerComponent().getModel('config').setProperty('/cameraSnapUrl', canvas.toDataURL('image/jpg'))
 
 			// Open the dialog
-			this.onOpenPreview();
+			this.onOpenImagePreview();
 		},
 
-		onOpenPreview() {
+		onOpenImagePreview() {
 			const oView = this.getView();
 
 			// create dialog lazily
@@ -86,9 +86,54 @@ sap.ui.define([
 			}
 		},
 
+		onOpenTextPreview() {
+			const oView = this.getView();
+
+			// create dialog lazily
+			if (!this.byId("text-preview")) {
+				// load asynchronous XML fragment
+				Fragment.load({
+					id: oView.getId(),
+					name: "ui5.demo.camera.view.Textpreview",
+					controller: this
+				}).then((oDialog) => {
+					// connect dialog to the root view of this component (models, lifecycle)
+					oView.addDependent(oDialog);
+					oDialog.open();
+				});
+			} else {
+				this.byId("text-preview").open();
+			}
+		},
+
+		onOpenBusyDialog() {
+			const oView = this.getView();
+
+			// create dialog lazily
+			if (!this.byId("busy-dialog")) {
+				// load asynchronous XML fragment
+				Fragment.load({
+					id: oView.getId(),
+					name: "ui5.demo.camera.view.Busydialog",
+					controller: this
+				}).then((oDialog) => {
+					// connect dialog to the root view of this component (models, lifecycle)
+					oView.addDependent(oDialog);
+					oDialog.open();
+				});
+			} else {
+				this.byId("busy-dialog").open();
+			}
+		},
+
 		handleSendImage() {
-			const server = 'http://localhost:3000/upload'
+			const self = this;
+			const server = 'http://localhost:3000/upload';
 			const snapUrl = this.getOwnerComponent().getModel('config').getProperty('/cameraSnapUrl');
+
+			// Close the preview window
+			self.onCloseImagePreview(); 
+			self.onOpenBusyDialog();
 
 			fetch(snapUrl)
 				.then((img) => img.blob())
@@ -102,20 +147,25 @@ sap.ui.define([
 						},
 					})
 						.then((res) => res.json())
-						.then((data) =>
-							console.log(data)
-						);
+						.then((data) => {
+							self.getOwnerComponent().getModel("textpreview").setProperty('/value', data.value)
+							self.onCloseBusyDialog();
+							self.onOpenTextPreview()
+						});
 				});
-		},
-
-		onClosePreview() {
-			this.byId("preview").close();
 		},
 
 		handleSetDeviceId() {
 			const oId = this.byId('cam-select').getSelectedKey()
 			this.getOwnerComponent().getModel('config').setProperty('/videoContraints/video/deviceId/exact', oId);
 			this.onChangeStream();
-		}
+		},
+
+		onCloseImagePreview() { this.byId("preview").close(); },
+
+		onCloseTextPreview() { this.byId("text-preview").close(); },
+
+		onCloseBusyDialog() { this.byId("busy-dialog").close(); },
+
 	});
 });

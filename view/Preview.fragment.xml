@@ -5,7 +5,7 @@
 
     <OverflowToolbar>
       <ToolbarSpacer/>
-      <Button press="onClosePreview" text="{i18n>buttonCloseText}" icon="sap-icon://decline" type="Reject"/>
+      <Button press="onCloseImagePreview" text="{i18n>buttonCloseText}" icon="sap-icon://decline" type="Reject"/>
       <Button press="handleSendImage" text="{i18n>buttonActionText}" icon="sap-icon://paper-plane" type="Accept" />
     </OverflowToolbar>
   </Dialog>
