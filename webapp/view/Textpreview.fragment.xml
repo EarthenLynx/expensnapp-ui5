@@ -1,0 +1,11 @@
+<core:FragmentDefinition xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+  <Dialog id="text-preview" title="{i18n>fragmentPreviewDialogTitle}" icon="sap-icon://document-text" resizable="true" draggable="true">
+    <TextArea width="100%" value="{textpreview>/value}" rows="8" />
+
+    <OverflowToolbar>
+      <ToolbarSpacer/>
+      <Button press="onCloseTextPreview" text="{i18n>buttonCloseText}" icon="sap-icon://decline" type="Reject"/>
+    </OverflowToolbar>
+  </Dialog>
+</core:FragmentDefinition>

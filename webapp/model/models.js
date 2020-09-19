@@ -27,6 +27,15 @@ sap.ui.define([
 					},
 				}
 			})
+
+			return oModel;
+		},
+
+		createTextPreviewModel() {
+			const oModel = new JSONModel({
+				"value": ""
+			});
+
 			return oModel;
 		}
 
