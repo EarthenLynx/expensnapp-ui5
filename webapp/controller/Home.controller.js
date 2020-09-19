@@ -25,7 +25,6 @@ sap.ui.define([
 				)
 				.then((videoDevices) => {
 					// Set the config model accordingly to the media devices that have been found
-					console.log(videoDevices);
 					config.setProperty('/videoDevices', videoDevices);
 				})
 				.then(
@@ -39,7 +38,7 @@ sap.ui.define([
 
 		onChangeStream() {
 			const self = this;
-			
+
 			// Get the video contrains
 			const videoContraints = self.getOwnerComponent().getModel('config').getProperty('/videoContraints');
 			const video = document.getElementById('video-stream');
@@ -87,9 +86,31 @@ sap.ui.define([
 			}
 		},
 
+		handleSendImage() {
+			const server = 'http://localhost:3000/upload'
+			const snapUrl = this.getOwnerComponent().getModel('config').getProperty('/cameraSnapUrl');
+
+			fetch(snapUrl)
+				.then((img) => img.blob())
+				.then((blob) => {
+					fetch(server, {
+						method: 'POST',
+						body: blob,
+						responseType: 'stream',
+						headers: {
+							'content-type': blob.type,
+						},
+					})
+						.then((res) => res.json())
+						.then((data) =>
+							console.log(data)
+						);
+				});
+		},
+
 		onClosePreview() {
 			this.byId("preview").close();
-		}, 
+		},
 
 		handleSetDeviceId() {
 			const oId = this.byId('cam-select').getSelectedKey()
